@@ -1,2 +1,2 @@
 # Tetris
-game
+Play tetris on the terminal
