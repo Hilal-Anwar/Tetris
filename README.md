@@ -16,8 +16,13 @@ How do you play?
 The Tetris game requires players to strategically rotate, move, and drop a procession of Tetriminos that fall into the rectangular Matrix at increasing speeds. Players attempt to clear as many lines as possible by completing horizontal rows of blocks without empty space, but if the Tetriminos surpass the Skyline the game is over! It might sound simple, but strategy and speed can go a long way! Are YOU up for the challenge?
 
 
+
+https://user-images.githubusercontent.com/50636048/154329595-e8ea869f-d09f-4141-b8f1-a761264f5a06.mp4
+
+
 ![This is an image](https://github.com/Hilal-Anwar/Tetris/blob/master/Screenshot%202022-02-16%20225120.png)
 
 ![This is an image](https://github.com/Hilal-Anwar/Tetris/blob/master/Screenshot%202022-02-16%20225201.png)
 
 ![This is an image](https://github.com/Hilal-Anwar/Tetris/blob/master/Screenshot%202022-02-16%20225230.png)
+
