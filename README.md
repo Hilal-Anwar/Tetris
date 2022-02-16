@@ -24,5 +24,4 @@ https://user-images.githubusercontent.com/50636048/154329595-e8ea869f-d09f-4141-
 
 ![This is an image](https://github.com/Hilal-Anwar/Tetris/blob/master/Screenshot%202022-02-16%20225201.png)
 
-![This is an image](https://github.com/Hilal-Anwar/Tetris/blob/master/Screenshot%202022-02-16%20225230.png)
 
