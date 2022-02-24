@@ -8,7 +8,7 @@ import static org.game.tetris.Main.keyBoardInput;
 
 
 public class Game {
-    private Tile[][] box = new Tile[40][15];
+    private Tile[][] box = new Tile[30][15];
     private Tile[] tetrominoes;
     private boolean hold_key = false;
     private final Tetrominoes tetris = new Tetrominoes();
@@ -22,7 +22,7 @@ public class Game {
     private boolean game_status = true;
 
     void start() throws IOException, InterruptedException {
-        initialize_tetris(15, 40);
+        initialize_tetris(15, 30);
         tetris_no = 3;
         tetrominoes = tetris.getTetrominoes((int) (Math.random() * 10 + 1), 1, tetris_no);
         dummy_tetris_no = (int) (Math.random() * 7 + 1);
@@ -36,8 +36,8 @@ public class Game {
                 if (keyBoardInput.getKeyBoardKey() == Key.ESC)
                     System.exit(-1);
                 if (keyBoardInput.getKeyBoardKey() == Key.SPACE) {
-                    box = new Tile[40][15];
-                    initialize_tetris(15, 40);
+                    box = new Tile[30][15];
+                    initialize_tetris(15, 30);
                     game_status = true;
 
                 }
@@ -52,7 +52,7 @@ public class Game {
     private void check_for_tetris() throws IOException, InterruptedException {
         int c = 0;
         int k = 0;
-        for (int i = 38; i >= 1; i--) {
+        for (int i = 28; i >= 1; i--) {
             if (i == 1) {
                 game_status = false;
                 play("sound/gameover.wav", -0.0f, false);
@@ -127,8 +127,8 @@ public class Game {
             System.exit(-1);
         int step;
         if (dir == Key.DROP) {
-            step = getAvailable(40);
-            play("sound/fall.wav", -0.0f, false);
+            step = getAvailable(30);
+            play("sound/fall.wav", -10.0f, false);
         } else step = getAvailable(1);
         if (step > 0 || condition) {
             for (var t : tetrominoes) {
@@ -456,7 +456,7 @@ public class Game {
                 return false;
         }
         for (int i = 3; i <= 5; i++) {
-            if (c[i] <= 0 || c[i] >= 39)
+            if (c[i] <= 0 || c[i] >= 29)
                 return false;
         }
         return true;
