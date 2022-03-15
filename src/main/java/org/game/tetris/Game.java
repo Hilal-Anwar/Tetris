@@ -361,19 +361,11 @@ public class Game {
         return i - 1;
 
     }
-
+    private String message() {
+        return "" + (" ".repeat(21 - "".length() - "Tetris".length() / 2)) + "Tetris";
+    }
     private void draw() {
-        String TITLE = """
-                    
-                \033[0;31m████████╗███████╗████████╗██████╗ ██╗███████╗\33[0m
-                \033[0;32m╚══██╔══╝██╔════╝╚══██╔══╝██╔══██╗██║██╔════╝\33[0m
-                 \033[0;33m  ██║   █████╗     ██║   ██████╔╝██║███████╗\33[0m
-                  \033[0;34m ██║   ██╔══╝     ██║   ██╔══██╗██║╚════██║\33[0m
-                   \033[0;35m██║   ███████╗   ██║   ██║  ██║██║███████║\33[0m
-                   \033[0;96m╚═╝   ╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝╚══════╝\33[0m
-                    
-                """;
-        System.out.println(TITLE);
+        System.out.println(message() + "\n");
         StringBuilder s = new StringBuilder();
         for (int i = 0; i < box.length; i++) {
             Tile[] tiles = box[i];

@@ -4,18 +4,30 @@ import java.io.IOException;
 
 public class Main {
     static final KeyBoardInput keyBoardInput = new KeyBoardInput();
-
+    static String TITLE = """
+                
+                
+                
+                    
+                \033[0;31m████████╗███████╗████████╗██████╗ ██╗███████╗\33[0m
+                \033[0;32m╚══██╔══╝██╔════╝╚══██╔══╝██╔══██╗██║██╔════╝\33[0m
+                 \033[0;33m  ██║   █████╗     ██║   ██████╔╝██║███████╗\33[0m
+                  \033[0;34m ██║   ██╔══╝     ██║   ██╔══██╗██║╚════██║\33[0m
+                   \033[0;35m██║   ███████╗   ██║   ██║  ██║██║███████║\33[0m
+                   \033[0;96m╚═╝   ╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝╚══════╝\33[0m
+                    
+                """;
     public static void main(String[] args) throws IOException, InterruptedException {
-        Game.play("sound/background_sound.wav",-25.0f,true);
         String information = """
-                1. Enter the \033[0;33m"up"\33[0m key to rotate left
-                2. Enter the \033[0;33m"down"\33[0m key to rotate right
-                3. Enter the \033[0;33m"left"\33[0m key to move left
-                4. Enter the \033[0;33m"right"\33[0m key to move right
-                5. Enter the \033[0;33m"d"\33[0m key to drop downward(move fast forward)
-                6. Enter the \033[0;33m"TAB"\33[0m key for about
-                7. Enter the \033[0;33m"BACKSPACE"\33[0m key to move back
-                8. Enter the \033[0;33m"EAC"\33[0m key to exit
+                1. Press the \033[0;33m"up"\33[0m key to rotate left
+                2. Press the \033[0;33m"down"\33[0m key to rotate right
+                3. Press the \033[0;33m"left"\33[0m key to move left
+                4. Press the \033[0;33m"right"\33[0m key to move right
+                5. Press the \033[0;33m"d"\33[0m key to drop downward(move fast forward)
+                6. Press the \033[0;33m"TAB"\33[0m key for about
+                7. Press the \033[0;33m"BACKSPACE"\33[0m key to move back
+                8. Press the \033[0;33m"ESC"\33[0m key to exit
+                9. Press the \033[0;33m"Space"\33[0m key to restart the game
                 """;
         String about = """
                                                 About
@@ -45,6 +57,8 @@ public class Main {
                 \033[0;33mPlease do give your useful suggestions\33[0m
                 """;
         String message = information;
+        loading(new StringBuilder("=>"));
+        Game.play("sound/background_sound.wav",-25.0f,true);
         while (keyBoardInput.getKeyBoardKey() != Key.ENTER) {
             var k = keyBoardInput.getKeyBoardKey();
             System.out.println("Welcome to tetris");
@@ -63,7 +77,15 @@ public class Main {
         var game = new Game();
         game.start();
     }
-
+    private static void loading(StringBuilder s) throws InterruptedException, IOException {
+        while (s.length() <= 45) {
+            System.out.println(TITLE.indent(30));
+            s.insert(0, "=");
+            System.out.println(s.toString().indent(25));
+            Thread.sleep(10);
+            cls();
+        }
+    }
     static void cls() throws IOException, InterruptedException {
         new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
     }
