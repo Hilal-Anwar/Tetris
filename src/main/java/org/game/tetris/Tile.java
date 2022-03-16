@@ -12,7 +12,7 @@ public class Tile {
         this.color=color;
     }
     public String getTile(){
-        return color.getColor()+"▓▓▓"+"\33[0m";
+        return color.getColor()+"███"+"\33[0m";
     }
 
     @Override
