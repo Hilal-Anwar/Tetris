@@ -1,8 +1,13 @@
 org\game\tetris\Tetrominoes.class
+org\game\tetris\Effects.class
 org\game\tetris\Color.class
 org\game\tetris\Game$1.class
+org\game\tetris\Game$Tuples.class
+org\game\tetris\Orientation.class
 org\game\tetris\Main.class
 org\game\tetris\Game.class
+org\game\tetris\GameLauncher.class
 org\game\tetris\Key.class
 org\game\tetris\Tile.class
+org\game\tetris\Display.class
 org\game\tetris\KeyBoardInput.class

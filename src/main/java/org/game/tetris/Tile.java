@@ -2,7 +2,7 @@ package org.game.tetris;
 
 public class Tile {
     int x, y;
-    private final Color color;
+    final Color color;
     public Tile(Color color){
         this.color=color;
     }

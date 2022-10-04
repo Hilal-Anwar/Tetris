@@ -1,17 +1,23 @@
 package org.game.tetris;
 
+import org.jline.utils.InfoCmp;
+
 import javax.sound.sampled.*;
 import java.io.IOException;
 import java.util.Objects;
 
-import static org.game.tetris.Main.keyBoardInput;
 
 
-public class Game {
+
+public class Game  {
     private Tile[][] box = new Tile[30][15];
-    private Tile[] tetrominoes;
+   private Tile[] tetrominoes;
+    //private Tile[][] _tetrominoes;
     private boolean hold_key = false;
-    private final Tetrominoes tetris = new Tetrominoes();
+    private double tetrominoes_speed=0.02;
+    private int game_object_frame=0;
+   private final Tetrominoes tetris = new Tetrominoes();
+    //private Tetrominoes _tetris = new Tetrominoes();
     private int score = 0;
     private int lines = 0;
     private int tetris_no;
@@ -20,13 +26,23 @@ public class Game {
     private int no_of_tetrominoes = 1;
     private Tile[] dummy_tetris;
     private boolean game_status = true;
+    private KeyBoardInput keyBoardInput;
+    private Display display;
+
+    public Game(KeyBoardInput keyBoardInput, Display display) {
+        this.keyBoardInput = keyBoardInput;
+        this.display = display;
+    }
 
     void start() throws IOException, InterruptedException {
+
         initialize_tetris(15, 30);
         tetris_no = 3;
         tetrominoes = tetris.getTetrominoes((int) (Math.random() * 10 + 1), 1, tetris_no);
         dummy_tetris_no = (int) (Math.random() * 7 + 1);
         dummy_tetris = tetris.getTetrominoes(30, 8, dummy_tetris_no);
+        //_tetrominoes = _tetris._getTetrominoes(7, 10, tetris_no);
+
         while (true) {
             if (game_status) {
                 draw();
@@ -43,8 +59,9 @@ public class Game {
                 }
                 game_statistics();
             }
-            Thread.sleep(100);
-            Main.cls();
+            Thread.sleep(30);
+            game_object_frame=game_object_frame>tetrominoes_speed*1000?0:game_object_frame+30;
+            display.terminal.puts(InfoCmp.Capability.clear_screen);
         }
 
     }
@@ -94,7 +111,7 @@ public class Game {
             }
             p--;
             q++;
-            Main.cls();
+            display.terminal.puts(InfoCmp.Capability.clear_screen);
             draw();
             try {
                 Thread.sleep(10);
@@ -107,40 +124,42 @@ public class Game {
     }
 
     private void move() {
-        var dir = keyBoardInput.getKeyBoardKey();
-        boolean condition = switch (dir) {
+        var key_pressed = keyBoardInput.getKeyBoardKey();
+        boolean condition = switch (key_pressed) {
             case RIGHT -> isSpace_right();
             case LEFT -> isSpace_left();
             default -> false;
         };
-        if (dir == Key.DOWN) {
-            rotate(dir);
+        if (key_pressed == Key.DOWN) {
+            rotate(key_pressed);
             play("sound/rotate.wav", -10.0f, false);
         }
-        if (dir == Key.UP) {
-            rotate(dir);
+        if (key_pressed == Key.UP) {
+            rotate(key_pressed);
             play("sound/rotate.wav", -10.0f, false);
         }
-        if (dir == Key.HOLD)
+        if (key_pressed == Key.HOLD)
             hold_key = !hold_key;
-        if (dir == Key.ESC)
+        if (key_pressed == Key.ESC)
             System.exit(-1);
         int step;
-        if (dir == Key.DROP) {
+        if (key_pressed == Key.SPACE && !hold_key) {
             step = getAvailable(30);
             play("sound/fall.wav", -10.0f, false);
         } else step = getAvailable(1);
         if (step > 0 || condition) {
-            for (var t : tetrominoes) {
-                if (dir != Key.LEFT && dir != Key.RIGHT && dir != Key.DOWN && dir != Key.UP && !hold_key)
+           for (var t : tetrominoes) {
+                if (key_pressed != Key.LEFT && key_pressed != Key.RIGHT &&
+                        key_pressed != Key.DOWN && key_pressed != Key.UP && !hold_key && (game_object_frame==0 || key_pressed==Key.SPACE))
                     t.y = t.y + step;
-                else if (dir == Key.LEFT && condition)
+                else if (key_pressed == Key.LEFT && condition)
                     t.x = t.x - 1;
-                else if (dir == Key.RIGHT && condition)
+                else if (key_pressed == Key.RIGHT && condition)
                     t.x = t.x + 1;
-            }
+
+           }
         } else {
-            for (var t : tetrominoes) {
+           for (var t : tetrominoes) {
                 box[t.y][t.x] = t;
             }
             no_of_tetrominoes++;
@@ -149,34 +168,65 @@ public class Game {
             tetrominoes = tetris.getTetrominoes((int) (Math.random() * 10 + 1), 1, tetris_no);
             dummy_tetris_no = (int) (Math.random() * 7 + 1);
             dummy_tetris = tetris.getTetrominoes(30, 8, dummy_tetris_no);
-            if (dir != Key.DROP)
+            if (key_pressed != Key.SPACE)
                 play("sound/slow-hit.wav", -0.0f, false);
 
         }
         keyBoardInput.setKeyBoardKey(Key.NONE);
     }
 
+   /* private void updateBoxMemory() {
+        for (int i = 0; i < _tetrominoes.length; i++) {
+            for (int j = 0; j < _tetrominoes[0].length; j++) {
+                if (_tetrominoes[i][j]!=null){
+                    box[_tetrominoes[i][j].y][_tetrominoes[i][j].x] =_tetrominoes[i][j];
+                }
+            }
+        }
+    }*/
+
     private boolean isSpace_right() {
-        return box[tetrominoes[0].y][tetrominoes[0].x + 1] == null &&
-                box[tetrominoes[1].y][tetrominoes[1].x + 1] == null &&
-                box[tetrominoes[2].y][tetrominoes[2].x + 1] == null &&
-                box[tetrominoes[3].y][tetrominoes[3].x + 1] == null;
-    }
+         return box[tetrominoes[0].y][tetrominoes[0].x + 1] == null &&
+                 box[tetrominoes[1].y][tetrominoes[1].x + 1] == null &&
+                 box[tetrominoes[2].y][tetrominoes[2].x + 1] == null &&
+                 box[tetrominoes[3].y][tetrominoes[3].x + 1] == null;
+     }
 
-    private boolean isSpace_left() {
-        return box[tetrominoes[0].y][tetrominoes[0].x - 1] == null &&
-                box[tetrominoes[1].y][tetrominoes[1].x - 1] == null &&
-                box[tetrominoes[2].y][tetrominoes[2].x - 1] == null &&
-                box[tetrominoes[3].y][tetrominoes[3].x - 1] == null;
+     private boolean isSpace_left() {
+         return box[tetrominoes[0].y][tetrominoes[0].x - 1] == null &&
+                 box[tetrominoes[1].y][tetrominoes[1].x - 1] == null &&
+                 box[tetrominoes[2].y][tetrominoes[2].x - 1] == null &&
+                 box[tetrominoes[3].y][tetrominoes[3].x - 1] == null;
+     }
+   /* private boolean _isSpace_left() {
+        for (int i = 0; i < _tetrominoes.length; i++) {
+            for (int j = 0; j < _tetrominoes[0].length; j++) {
+                if (_tetrominoes[i][j]!=null){
+                    if (box[_tetrominoes[i][j].y][_tetrominoes[i][j].x - 1] != null)
+                        return false;
+                }
+            }
+        }
+        return true;
     }
-
-    private void rotate(Key key) {
+    private boolean _isSpace_right() {
+        for (int i = 0; i < _tetrominoes.length; i++) {
+            for (int j = 0; j < _tetrominoes[0].length; j++) {
+                if (_tetrominoes[i][j]!=null){
+                    if (box[_tetrominoes[i][j].y][_tetrominoes[i][j].x + 1] != null)
+                        return false;
+                }
+            }
+        }
+        return true;
+    }
+*/
+  private void rotate(Key key) {
         int X = tetrominoes[2].x;
         int Y = tetrominoes[2].y;
         switch (tetris_no) {
-            /*
-            ▓▓▓▓▓▓▓▓▓▓
-             */
+            //▓▓▓▓▓▓▓▓▓▓
+
             case 1 -> {
                 if (key == Key.UP) {
                     if (tetrominoes[2].y == tetrominoes[3].y && tetrominoes[3].x > tetrominoes[2].x) {
@@ -201,10 +251,10 @@ public class Game {
                     }
                 }
             }
-            /*
-            ▓
-            ▓▓▓▓▓▓▓▓▓▓
-             */
+
+           // ▓
+            //▓▓▓▓▓▓▓▓▓▓
+
             case 2 -> {
                 if (key == Key.UP) {
                     if (tetrominoes[2].y == tetrominoes[3].y && tetrominoes[3].x > tetrominoes[2].x) {
@@ -229,10 +279,9 @@ public class Game {
                     }
                 }
             }
-             /*
-                     ▓
-            ▓▓▓▓▓▓▓▓▓▓
-             */
+
+            //         ▓
+            //▓▓▓▓▓▓▓▓▓▓
             case 3 -> {
                 if (key == Key.UP) {
                     if (tetrominoes[2].y == tetrominoes[3].y && tetrominoes[1].x > tetrominoes[2].x) {
@@ -259,10 +308,9 @@ public class Game {
                     }
                 }
             }
-             /*
-              ▓▓▓▓
-            ▓▓▓▓
-             */
+
+              //▓▓▓▓
+            //▓▓▓▓
             case 5 -> {
                 if (key == Key.UP) {
                     if (tetrominoes[1].x == tetrominoes[2].x && tetrominoes[3].x < tetrominoes[0].x) {
@@ -287,10 +335,10 @@ public class Game {
                     }
                 }
             }
-            /*
-               ▓▓
-            ▓▓▓▓▓▓▓▓
-             */
+
+               //▓▓
+            //▓▓▓▓▓▓▓▓
+
             case 6 -> {
                 if (key == Key.UP) {
                     if (tetrominoes[2].y == tetrominoes[3].y && tetrominoes[3].x > tetrominoes[2].x) {
@@ -316,10 +364,10 @@ public class Game {
                 }
 
             }
-            /*
-              ▓▓▓▓
-                ▓▓▓▓
-             */
+
+              //▓▓▓▓
+                //▓▓▓▓
+
             case 7 -> {
                 if (key == Key.UP) {
                     if (tetrominoes[2].x == tetrominoes[1].x && tetrominoes[3].y > tetrominoes[0].y) {
@@ -346,7 +394,6 @@ public class Game {
             }
         }
     }
-
     private int getAvailable(int step) {
         int i;
         for (i = 1; i <= step; ) {
@@ -361,9 +408,34 @@ public class Game {
         return i - 1;
 
     }
+   /* private int _getAvailable(int step) {
+        int i;
+        for (i = 1; i <= step; ) {
+            int c=0;
+            for (Tile[] tu : _tetrominoes) {
+                for (int k = 0; k < _tetrominoes[0].length; k++) {
+                    if (tu[k] != null) {
+                        if (box[tu[k].y + i][tu[k].x] != null) {
+                            c = 1;
+                            break;
+                        }
+
+                    }
+                }
+                if (c == 1)
+                    break;
+            }
+            if (c==0)
+                i++;
+            else break;
+        }
+        return i - 1;
+
+    }*/
     private String message() {
         return "" + (" ".repeat(21 - "".length() - "Tetris".length() / 2)) + "Tetris";
     }
+
     private void draw() {
         System.out.println(message() + "\n");
         StringBuilder s = new StringBuilder();
@@ -416,11 +488,13 @@ public class Game {
                         s.append("   ");
                 }
             }
+            if (i == 12)
+                s.append(" Hold key : ").append(hold_key ? "on" : "off");
             s.append('\n');
         }
         System.out.println(s);
     }
-
+    record Tuples(boolean condition,Tile tiles){}
     private boolean print_tetrominoes(int i, int j) {
         for (var k : tetrominoes) {
             if (k.x == j && k.y == i) {
@@ -429,8 +503,20 @@ public class Game {
         }
         return false;
     }
+       /* Tile tile=null;
+        for (int i = 0; i < _tetrominoes.length; i++) {
+            for (int j = 0; j < _tetrominoes[0].length; j++) {
+                if (_tetrominoes[i][j]!=null){
+                    tile=_tetrominoes[i][j];
+                    if (_tetrominoes[i][j].y==a &&_tetrominoes[i][j].x ==b)
+                        return new Tuples(true,tile);
+                }
+            }
+        }
+        return new Tuples(false,null);
+    }*/
 
-    private void is_rotatable_rotate(int x0, int x1, int x3, int y0, int y1, int y3) {
+   private void is_rotatable_rotate(int x0, int x1, int x3, int y0, int y1, int y3) {
         if (isValidPoints(x0, x1, x3, y0, y1, y3) && box[y0][x0] == null && box[y1][x1] == null && box[y3][x3] == null) {
             tetrominoes[0].x = x0;
             tetrominoes[1].x = x1;
@@ -440,6 +526,10 @@ public class Game {
             tetrominoes[3].y = y3;
 
         }
+    }
+
+    private boolean isRotatable(int x, int y) {
+        return !(x <= 0 || x >= 14) && !(y <= 0 || y >= 29) && (box[y][x] == null);
     }
 
     private boolean isValidPoints(int... c) {
@@ -480,31 +570,31 @@ public class Game {
         System.out.println("Lines : " + lines);
         System.out.println();
         String t1 = """
-                \033[0;34m▓▓▓▓▓▓▓▓▓▓\33[0m     %s
+                \033[0;34m████████████\33[0m     %s
                 """;
         String t2 = """
-                \033[0;31m▓▓
-                \033[0;31m▓▓▓▓▓▓▓▓▓▓\33[0m     %s
+                \033[0;31m██
+                \033[0;31m████████████\33[0m     %s
                 """;
         String t3 = """
-                \033[0;36m        ▓▓
-                \033[0;36m▓▓▓▓▓▓▓▓▓▓\33[0m     %s
+                \033[0;36m          ██
+                \033[0;36m████████████\33[0m     %s
                 """;
         String t4 = """
-                \033[0;35m▓▓▓▓▓▓
-                \033[0;35m▓▓▓▓▓▓\33[0m         %s
+                \033[0;35m██████
+                \033[0;35m██████\33[0m         %s
                 """;
         String t5 = """
-                  \033[0;33m   ▓▓▓▓▓▓
-                  \033[0;33m▓▓▓▓▓▓\33[0m       %s
+                  \033[0;33m   ██████
+                  \033[0;33m██████\33[0m       %s
                 """;
         String t6 = """
-                  \033[0;32m   ▓▓
-                \033[0;32m  ▓▓▓▓▓▓▓▓\33[0m     %s
+                  \033[0;32m   ██
+                \033[0;32m ██████████\33[0m     %s
                   """;
         String t7 = """
-                 \033[0;96m▓▓▓▓▓▓
-                  \033[0;96m  ▓▓▓▓▓▓\33[0m     %s
+                 \033[0;96m██████
+                  \033[0;96m  ██████\33[0m     %s
                 """;
         System.out.printf((t1) + "%n", (int) (tetrominoes_data[0] * 100.0 / no_of_tetrominoes) + "%");
         System.out.printf((t2) + "%n", (int) (tetrominoes_data[1] * 100.0 / no_of_tetrominoes) + "%");
@@ -534,7 +624,7 @@ public class Game {
     }
 
     static void play(String name, float volume, boolean isRepeatable) {
-        var url = Game.class.getResource(name);
+        var url = GameLauncher.class.getResource(name);
         Clip audioClip;
         try (var audioInputStream = AudioSystem.getAudioInputStream(Objects.requireNonNull(url))) {
             var format = audioInputStream.getFormat();
@@ -550,4 +640,118 @@ public class Game {
             e.printStackTrace();
         }
     }
+/*
+    @Override
+    public void moveRight() {
+        //_tetris.xT=_tetris.xT+1;
+        for (int i = 0; i < _tetrominoes.length; i++) {
+            for (int j = 0; j < _tetrominoes[0].length; j++) {
+                if (_tetrominoes[i][j]!=null){
+                    _tetrominoes[i][j].x= _tetrominoes[i][j].x+1;
+
+                }
+            }
+        }
+    }
+
+    @Override
+    public void moveLeft() {
+        //_tetris.xT=_tetris.xT-1;
+        for (int i = 0; i < _tetrominoes.length; i++) {
+            for (int j = 0; j < _tetrominoes[0].length; j++) {
+                if (_tetrominoes[i][j]!=null){
+                    _tetrominoes[i][j].x= _tetrominoes[i][j].x-1;
+
+                }
+            }
+        }
+    }
+
+    @Override
+    public void moveUp() {
+
+    }
+
+    @Override
+    public void moveDown(int steps) {
+        //_tetris.yT=_tetris.yT+steps;
+        for (int i = 0; i < _tetrominoes.length; i++) {
+            for (int j = 0; j < _tetrominoes[0].length; j++) {
+                if (_tetrominoes[i][j]!=null){
+                   _tetrominoes[i][j].y= _tetrominoes[i][j].y+steps;
+
+                }
+            }
+        }
+    }
+
+    @Override
+    public void rotateRight() {
+        var b = new Tile[_tetrominoes[0].length][_tetrominoes.length];
+        int c = 0;
+        int u,u1;
+        int v,v1;
+        if (_tetris.orientation.equals(Orientation.HORIZONTAL)) {
+            u=(_tetrominoes[0][2]!=null)?_tetrominoes[0][2].y-2:_tetrominoes[1][2].y-2;
+            v=(_tetrominoes[0][2]!=null)?_tetrominoes[0][2].x:_tetrominoes[1][2].x;
+        }
+        else {
+            v=(_tetrominoes[2][0]!=null)?_tetrominoes[2][0].x-2:_tetrominoes[2][1].x-2;
+            u=(_tetrominoes[2][0]!=null)?_tetrominoes[2][0].y:_tetrominoes[2][1].y;
+        }
+        v1=v;
+        for (int i = _tetrominoes.length - 1; i >= 0; i--) {
+            u1=u;
+            var k = _tetrominoes[i];
+            for (int j = 0; j < k.length; j++) {
+                if (k[j] != null) {
+                    if (isRotatable(v1,u1)) {
+                        //k[j].x = _tetris.xT + i;
+                        //k[j].y = _tetris.yT + j;
+                        b[j][_tetrominoes.length - 1 - i] = new Tile(v1, u1,k[j].color);
+                    } else {
+                        c = 1;
+                        break;
+                    }
+                }
+                u1++;
+            }
+            v1++;
+            if (c == 1)
+                break;
+        }
+        if (c != 1){
+            _tetrominoes = b;
+            _tetris.orientation=(_tetris.orientation.equals(Orientation.VERTICAL))?Orientation.HORIZONTAL:Orientation.VERTICAL;
+        }
+    }
+
+    @Override
+    public void rotateLeft() {
+        var b = new Tile[_tetrominoes[0].length][_tetrominoes.length];
+        int t = 0;
+        int c = 0;
+        for (int i = _tetrominoes.length - 1; i >= 0; i--) {
+            var k = _tetrominoes[i];
+            int p = 0;
+            for (int j = k.length - 1; j >= 0; j--) {
+                if (k[j] != null) {
+                    if (isRotatable(_tetris.yT + p, _tetris.xT + t)) {
+                        k[j].x = _tetris.xT + t;
+                        k[j].y = _tetris.yT + p;
+                        b[p][_tetrominoes.length - 1 - t] = k[j];
+                        p++;
+                    } else {
+                        c = 1;
+                        break;
+                    }
+                }
+            }
+            t++;
+            if (c == 1)
+                break;
+        }
+        if (c != 1)
+            _tetrominoes = b;
+    }*/
 }
