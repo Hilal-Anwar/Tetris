@@ -1,4 +1,6 @@
 # Tetris
+![WindowsTerminal_7MBE89MXLR](https://user-images.githubusercontent.com/50636048/211160874-adef9714-4b6c-4407-b031-66450783c1bb.png)
+
 This game is inspired from  Tetris 99.
 It can only work in the terminal.
 
@@ -19,13 +21,3 @@ The Tetris game requires players to strategically rotate, move, and drop a proce
 
 
 https://user-images.githubusercontent.com/50636048/211141577-2e625e99-93b4-4451-a238-3103d54501e2.mp4
-
-
-https://user-images.githubusercontent.com/50636048/154329595-e8ea869f-d09f-4141-b8f1-a761264f5a06.mp4
-
-
-![This is an image](https://github.com/Hilal-Anwar/Tetris/blob/master/Screenshot%202022-02-16%20225120.png)
-
-![This is an image](https://github.com/Hilal-Anwar/Tetris/blob/master/Screenshot%202022-02-16%20225201.png)
-
-
