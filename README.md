@@ -1,10 +1,6 @@
 # Tetris
 ![WindowsTerminal_7MBE89MXLR](https://user-images.githubusercontent.com/50636048/211160874-adef9714-4b6c-4407-b031-66450783c1bb.png)
 
-
-![Tetris](https://user-images.githubusercontent.com/50636048/221371294-38db669f-5a93-4d00-a675-0ed97cd121ca.gif)
-
-
 This game is inspired from  Tetris 99.
 It can only work in the terminal.
 
@@ -16,6 +12,7 @@ By embracing our universal desire to create order out of chaos, the Tetris game 
 
 As one of the most recognizable and influential video game brands in the world, it’s no wonder why there are hundreds of millions of Tetris products being played, worn, and enjoyed by fans in their everyday lives. For over thirty-five years, the game and brand have truly transcended the barriers of culture and language, resulting in a fun and exciting playing experience for everyone, everywhere!
 
+![Tetris](https://user-images.githubusercontent.com/50636048/221371294-38db669f-5a93-4d00-a675-0ed97cd121ca.gif)
 
 How do you play?
 
