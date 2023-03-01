@@ -1,0 +1,5 @@
+[
+  {
+    "interfaces":["org.jline.terminal.impl.jna.win.Kernel32"]
+  }
+]

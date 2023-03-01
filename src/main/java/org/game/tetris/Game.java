@@ -3,10 +3,11 @@ package org.game.tetris;
 import org.jline.utils.InfoCmp;
 
 import javax.sound.sampled.*;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
-
-
+import java.util.Properties;
 
 
 public class Game  {
@@ -14,7 +15,7 @@ public class Game  {
    private Tile[] tetrominoes;
     //private Tile[][] _tetrominoes;
     private boolean hold_key = false;
-    private double tetrominoes_speed=0.02;
+    private double tetrominoes_speed=0.001;
     private int game_object_frame=0;
    private final Tetrominoes tetris = new Tetrominoes();
     //private Tetrominoes _tetris = new Tetrominoes();
@@ -59,8 +60,8 @@ public class Game  {
                 }
                 game_statistics();
             }
-            Thread.sleep(30);
-            game_object_frame=game_object_frame>tetrominoes_speed*1000?0:game_object_frame+30;
+            Thread.sleep(100);
+            //game_object_frame=game_object_frame>tetrominoes_speed*1000?0:game_object_frame+30;
             display.terminal.puts(InfoCmp.Capability.clear_screen);
         }
 
@@ -150,7 +151,8 @@ public class Game  {
         if (step > 0 || condition) {
            for (var t : tetrominoes) {
                 if (key_pressed != Key.LEFT && key_pressed != Key.RIGHT &&
-                        key_pressed != Key.DOWN && key_pressed != Key.UP && !hold_key && (game_object_frame==0 || key_pressed==Key.SPACE))
+                        key_pressed != Key.DOWN && key_pressed != Key.UP && !hold_key &&
+                        (game_object_frame==0 || key_pressed==Key.SPACE))
                     t.y = t.y + step;
                 else if (key_pressed == Key.LEFT && condition)
                     t.x = t.x - 1;
@@ -626,10 +628,20 @@ public class Game  {
     static void play(String name, float volume, boolean isRepeatable) {
         var url = GameLauncher.class.getResource(name);
         Clip audioClip;
+        var p=new Properties();
+        try (var resourceAsStream = GameLauncher.class.getResourceAsStream("sound/sound.properties")) {
+            try {
+                p.load(resourceAsStream);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         try (var audioInputStream = AudioSystem.getAudioInputStream(Objects.requireNonNull(url))) {
-            var format = audioInputStream.getFormat();
-            DataLine.Info info = new DataLine.Info(Clip.class, format);
-            audioClip = (Clip) AudioSystem.getLine(info);
+            //var format = audioInputStream.getFormat();
+            //DataLine.Info info = new DataLine.Info(Clip.class, format);
+            audioClip = AudioSystem.getClip();
             audioClip.open(audioInputStream);
             var level = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
             level.setValue(volume);

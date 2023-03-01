@@ -7,11 +7,7 @@ import java.io.IOException;
 public class GameLauncher {
     KeyBoardInput keyBoardInput;
     Display display;
-    static String TITLE = """
-                            
-                            
-                            
-                
+    static String TITLE = """    
             \033[0;31m████████╗███████╗████████╗██████╗ ██╗███████╗\33[0m
             \033[0;32m╚══██╔══╝██╔════╝╚══██╔══╝██╔══██╗██║██╔════╝\33[0m
              \033[0;33m  ██║   █████╗     ██║   ██████╔╝██║███████╗\33[0m
