@@ -1,4 +1,6 @@
 # Tetris
+![WindowsTerminal_7MBE89MXLR](https://user-images.githubusercontent.com/50636048/211160874-adef9714-4b6c-4407-b031-66450783c1bb.png)
+
 This game is inspired from  Tetris 99.
 It can only work in the terminal.
 
@@ -10,6 +12,7 @@ By embracing our universal desire to create order out of chaos, the Tetris game 
 
 As one of the most recognizable and influential video game brands in the world, it’s no wonder why there are hundreds of millions of Tetris products being played, worn, and enjoyed by fans in their everyday lives. For over thirty-five years, the game and brand have truly transcended the barriers of culture and language, resulting in a fun and exciting playing experience for everyone, everywhere!
 
+![Tetris](https://user-images.githubusercontent.com/50636048/221371294-38db669f-5a93-4d00-a675-0ed97cd121ca.gif)
 
 How do you play?
 
@@ -17,11 +20,10 @@ The Tetris game requires players to strategically rotate, move, and drop a proce
 
 
 
-https://user-images.githubusercontent.com/50636048/154329595-e8ea869f-d09f-4141-b8f1-a761264f5a06.mp4
+
+Some stupid game play
+
+https://user-images.githubusercontent.com/50636048/221371328-7f74b8a4-a82e-404d-896a-f1d16087a278.mp4
 
 
-![This is an image](https://github.com/Hilal-Anwar/Tetris/blob/master/Screenshot%202022-02-16%20225120.png)
-
-![This is an image](https://github.com/Hilal-Anwar/Tetris/blob/master/Screenshot%202022-02-16%20225201.png)
-
-
+https://user-images.githubusercontent.com/50636048/211141577-2e625e99-93b4-4451-a238-3103d54501e2.mp4
