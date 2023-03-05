@@ -29,7 +29,8 @@ public class GameLauncher {
                 6. Press the \033[0;33m"TAB"\33[0m key for about
                 7. Press the \033[0;33m"BACKSPACE"\33[0m key to move back
                 8. Press the \033[0;33m"ESC"\33[0m key to exit
-                9. Press the \033[0;33m"Space"\33[0m key to restart the game
+                9. Press the \033[0;33m"Space"\33[0m key to drop the tetrominoes
+                10.Press the \033[0;33m"r"\33[0m key to restart
                 """;
         String about = """
                                                 About

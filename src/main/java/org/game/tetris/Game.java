@@ -3,21 +3,19 @@ package org.game.tetris;
 import org.jline.utils.InfoCmp;
 
 import javax.sound.sampled.*;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Objects;
 import java.util.Properties;
 
 
-public class Game  {
+public class Game {
     private Tile[][] box = new Tile[30][15];
-   private Tile[] tetrominoes;
+    private Tile[] tetrominoes;
     //private Tile[][] _tetrominoes;
     private boolean hold_key = false;
-    private double tetrominoes_speed=0.001;
-    private int game_object_frame=0;
-   private final Tetrominoes tetris = new Tetrominoes();
+    private double tetrominoes_speed = 0.001;
+    private int game_object_frame = 0;
+    private final Tetrominoes tetris = new Tetrominoes();
     //private Tetrominoes _tetris = new Tetrominoes();
     private int score = 0;
     private int lines = 0;
@@ -29,7 +27,7 @@ public class Game  {
     private boolean game_status = true;
     private KeyBoardInput keyBoardInput;
     private Display display;
-
+    private int _tetris_timer=0;
     public Game(KeyBoardInput keyBoardInput, Display display) {
         this.keyBoardInput = keyBoardInput;
         this.display = display;
@@ -52,7 +50,7 @@ public class Game  {
             } else {
                 if (keyBoardInput.getKeyBoardKey() == Key.ESC)
                     System.exit(-1);
-                if (keyBoardInput.getKeyBoardKey() == Key.SPACE) {
+                if (keyBoardInput.getKeyBoardKey() == Key.RESTART) {
                     box = new Tile[30][15];
                     initialize_tetris(15, 30);
                     game_status = true;
@@ -60,8 +58,8 @@ public class Game  {
                 }
                 game_statistics();
             }
-            Thread.sleep(100);
-            //game_object_frame=game_object_frame>tetrominoes_speed*1000?0:game_object_frame+30;
+            Thread.sleep(60);
+            game_object_frame=game_object_frame>tetrominoes_speed*1000?0:game_object_frame+30;
             display.terminal.puts(InfoCmp.Capability.clear_screen);
         }
 
@@ -149,19 +147,19 @@ public class Game  {
             play("sound/fall.wav", -10.0f, false);
         } else step = getAvailable(1);
         if (step > 0 || condition) {
-           for (var t : tetrominoes) {
-                if (key_pressed != Key.LEFT && key_pressed != Key.RIGHT &&
-                        key_pressed != Key.DOWN && key_pressed != Key.UP && !hold_key &&
-                        (game_object_frame==0 || key_pressed==Key.SPACE))
-                    t.y = t.y + step;
-                else if (key_pressed == Key.LEFT && condition)
+            for (var t : tetrominoes) {
+                if (key_pressed == Key.LEFT && condition)
                     t.x = t.x - 1;
                 else if (key_pressed == Key.RIGHT && condition)
                     t.x = t.x + 1;
+                else if (key_pressed != Key.LEFT && key_pressed != Key.RIGHT &&
+                        key_pressed != Key.DOWN && key_pressed != Key.UP && !hold_key &&
+                        (game_object_frame == 0 || key_pressed == Key.SPACE))
+                    t.y = t.y + step;
 
-           }
-        } else {
-           for (var t : tetrominoes) {
+            }
+        } else if (_tetris_timer==5){
+            for (var t : tetrominoes) {
                 box[t.y][t.x] = t;
             }
             no_of_tetrominoes++;
@@ -172,8 +170,9 @@ public class Game  {
             dummy_tetris = tetris.getTetrominoes(30, 8, dummy_tetris_no);
             if (key_pressed != Key.SPACE)
                 play("sound/slow-hit.wav", -0.0f, false);
-
+            _tetris_timer=0;
         }
+        else _tetris_timer++;
         keyBoardInput.setKeyBoardKey(Key.NONE);
     }
 
@@ -188,42 +187,43 @@ public class Game  {
     }*/
 
     private boolean isSpace_right() {
-         return box[tetrominoes[0].y][tetrominoes[0].x + 1] == null &&
-                 box[tetrominoes[1].y][tetrominoes[1].x + 1] == null &&
-                 box[tetrominoes[2].y][tetrominoes[2].x + 1] == null &&
-                 box[tetrominoes[3].y][tetrominoes[3].x + 1] == null;
-     }
+        return box[tetrominoes[0].y][tetrominoes[0].x + 1] == null &&
+                box[tetrominoes[1].y][tetrominoes[1].x + 1] == null &&
+                box[tetrominoes[2].y][tetrominoes[2].x + 1] == null &&
+                box[tetrominoes[3].y][tetrominoes[3].x + 1] == null;
+    }
 
-     private boolean isSpace_left() {
-         return box[tetrominoes[0].y][tetrominoes[0].x - 1] == null &&
-                 box[tetrominoes[1].y][tetrominoes[1].x - 1] == null &&
-                 box[tetrominoes[2].y][tetrominoes[2].x - 1] == null &&
-                 box[tetrominoes[3].y][tetrominoes[3].x - 1] == null;
+    private boolean isSpace_left() {
+        return box[tetrominoes[0].y][tetrominoes[0].x - 1] == null &&
+                box[tetrominoes[1].y][tetrominoes[1].x - 1] == null &&
+                box[tetrominoes[2].y][tetrominoes[2].x - 1] == null &&
+                box[tetrominoes[3].y][tetrominoes[3].x - 1] == null;
+    }
+
+    /* private boolean _isSpace_left() {
+         for (int i = 0; i < _tetrominoes.length; i++) {
+             for (int j = 0; j < _tetrominoes[0].length; j++) {
+                 if (_tetrominoes[i][j]!=null){
+                     if (box[_tetrominoes[i][j].y][_tetrominoes[i][j].x - 1] != null)
+                         return false;
+                 }
+             }
+         }
+         return true;
      }
-   /* private boolean _isSpace_left() {
-        for (int i = 0; i < _tetrominoes.length; i++) {
-            for (int j = 0; j < _tetrominoes[0].length; j++) {
-                if (_tetrominoes[i][j]!=null){
-                    if (box[_tetrominoes[i][j].y][_tetrominoes[i][j].x - 1] != null)
-                        return false;
-                }
-            }
-        }
-        return true;
-    }
-    private boolean _isSpace_right() {
-        for (int i = 0; i < _tetrominoes.length; i++) {
-            for (int j = 0; j < _tetrominoes[0].length; j++) {
-                if (_tetrominoes[i][j]!=null){
-                    if (box[_tetrominoes[i][j].y][_tetrominoes[i][j].x + 1] != null)
-                        return false;
-                }
-            }
-        }
-        return true;
-    }
-*/
-  private void rotate(Key key) {
+     private boolean _isSpace_right() {
+         for (int i = 0; i < _tetrominoes.length; i++) {
+             for (int j = 0; j < _tetrominoes[0].length; j++) {
+                 if (_tetrominoes[i][j]!=null){
+                     if (box[_tetrominoes[i][j].y][_tetrominoes[i][j].x + 1] != null)
+                         return false;
+                 }
+             }
+         }
+         return true;
+     }
+ */
+    private void rotate(Key key) {
         int X = tetrominoes[2].x;
         int Y = tetrominoes[2].y;
         switch (tetris_no) {
@@ -254,7 +254,7 @@ public class Game  {
                 }
             }
 
-           // ▓
+            // ▓
             //▓▓▓▓▓▓▓▓▓▓
 
             case 2 -> {
@@ -311,7 +311,7 @@ public class Game  {
                 }
             }
 
-              //▓▓▓▓
+            //▓▓▓▓
             //▓▓▓▓
             case 5 -> {
                 if (key == Key.UP) {
@@ -338,7 +338,7 @@ public class Game  {
                 }
             }
 
-               //▓▓
+            //▓▓
             //▓▓▓▓▓▓▓▓
 
             case 6 -> {
@@ -367,8 +367,8 @@ public class Game  {
 
             }
 
-              //▓▓▓▓
-                //▓▓▓▓
+            //▓▓▓▓
+            //▓▓▓▓
 
             case 7 -> {
                 if (key == Key.UP) {
@@ -396,6 +396,7 @@ public class Game  {
             }
         }
     }
+
     private int getAvailable(int step) {
         int i;
         for (i = 1; i <= step; ) {
@@ -410,30 +411,31 @@ public class Game  {
         return i - 1;
 
     }
-   /* private int _getAvailable(int step) {
-        int i;
-        for (i = 1; i <= step; ) {
-            int c=0;
-            for (Tile[] tu : _tetrominoes) {
-                for (int k = 0; k < _tetrominoes[0].length; k++) {
-                    if (tu[k] != null) {
-                        if (box[tu[k].y + i][tu[k].x] != null) {
-                            c = 1;
-                            break;
-                        }
 
-                    }
-                }
-                if (c == 1)
-                    break;
-            }
-            if (c==0)
-                i++;
-            else break;
-        }
-        return i - 1;
+    /* private int _getAvailable(int step) {
+         int i;
+         for (i = 1; i <= step; ) {
+             int c=0;
+             for (Tile[] tu : _tetrominoes) {
+                 for (int k = 0; k < _tetrominoes[0].length; k++) {
+                     if (tu[k] != null) {
+                         if (box[tu[k].y + i][tu[k].x] != null) {
+                             c = 1;
+                             break;
+                         }
 
-    }*/
+                     }
+                 }
+                 if (c == 1)
+                     break;
+             }
+             if (c==0)
+                 i++;
+             else break;
+         }
+         return i - 1;
+
+     }*/
     private String message() {
         return "" + (" ".repeat(21 - "".length() - "Tetris".length() / 2)) + "Tetris";
     }
@@ -496,7 +498,10 @@ public class Game  {
         }
         System.out.println(s);
     }
-    record Tuples(boolean condition,Tile tiles){}
+
+    record Tuples(boolean condition, Tile tiles) {
+    }
+
     private boolean print_tetrominoes(int i, int j) {
         for (var k : tetrominoes) {
             if (k.x == j && k.y == i) {
@@ -518,7 +523,7 @@ public class Game  {
         return new Tuples(false,null);
     }*/
 
-   private void is_rotatable_rotate(int x0, int x1, int x3, int y0, int y1, int y3) {
+    private void is_rotatable_rotate(int x0, int x1, int x3, int y0, int y1, int y3) {
         if (isValidPoints(x0, x1, x3, y0, y1, y3) && box[y0][x0] == null && box[y1][x1] == null && box[y3][x3] == null) {
             tetrominoes[0].x = x0;
             tetrominoes[1].x = x1;
@@ -606,7 +611,7 @@ public class Game  {
         System.out.printf((t6) + "%n", (int) (tetrominoes_data[5] * 100.0 / no_of_tetrominoes) + "%");
         System.out.printf((t7) + "%n", (int) (tetrominoes_data[6] * 100.0 / no_of_tetrominoes) + "%");
         System.out.println();
-        System.out.println("Enter space bar to continue.....");
+        System.out.println("Enter the r key  to restart.....");
     }
 
     private String isFilled(int i) {
@@ -628,7 +633,7 @@ public class Game  {
     static void play(String name, float volume, boolean isRepeatable) {
         var url = GameLauncher.class.getResource(name);
         Clip audioClip;
-        var p=new Properties();
+        var p = new Properties();
         try (var resourceAsStream = GameLauncher.class.getResourceAsStream("sound/sound.properties")) {
             try {
                 p.load(resourceAsStream);
