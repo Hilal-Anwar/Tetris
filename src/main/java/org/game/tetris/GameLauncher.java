@@ -75,7 +75,7 @@ public class GameLauncher {
                 System.exit(0);
             }
             Thread.sleep(50);
-            display.terminal.puts(InfoCmp.Capability.clear_screen);
+            display.getTerminal().puts(InfoCmp.Capability.clear_screen);
         }
         var game = new Game(keyBoardInput, display);
         game.start();
@@ -83,11 +83,12 @@ public class GameLauncher {
 
     private void loading(StringBuilder s) throws InterruptedException {
         while (s.length() <= 45) {
-            System.out.println(TITLE.indent(30));
+            System.out.println("\n".repeat(display.getSize().getRows()/2-10)
+                    +TITLE.indent(display.getSize().getColumns() / 2 - 21));
             s.insert(0, "=");
-            System.out.println(s.toString().indent(25));
+            System.out.println(s.toString().indent(display.getSize().getColumns() / 2 - 21));
             Thread.sleep(16);
-            display.terminal.puts(InfoCmp.Capability.clear_screen);
+            display.getTerminal().puts(InfoCmp.Capability.clear_screen);
         }
     }
 }

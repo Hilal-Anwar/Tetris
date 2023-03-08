@@ -9,7 +9,7 @@ public class KeyBoardInput {
         new Thread(() -> {
             while (true) {
                 try {
-                    setKeyBoardKey(getKeys(display.terminal.reader().read()));
+                    setKeyBoardKey(getKeys(display.getTerminal().reader().read()));
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
