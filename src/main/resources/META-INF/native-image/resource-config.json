@@ -3,7 +3,7 @@
   "includes":[
     {
       "pattern":"\\QMETA-INF/services/org.jline.terminal.spi.JansiSupport\\E"
-    },
+    }, 
     {
       "pattern":"\\QMETA-INF/services/org.jline.terminal.spi.JnaSupport\\E"
     }, 
@@ -15,30 +15,6 @@
     }, 
     {
       "pattern":"\\Qorg/fusesource/jansi/jansi.properties\\E"
-    },
-    {
-      "pattern":"\\Qorg/game/tetris/sound/sound.properties\\E"
-    },
-    {
-      "pattern":"\\Qorg/game/tetris/sound/background_sound.wav\\E"
-    }, 
-    {
-      "pattern":"\\Qorg/game/tetris/sound/clear.wav\\E"
-    }, 
-    {
-      "pattern":"\\Qorg/game/tetris/sound/fall.wav\\E"
-    }, 
-    {
-      "pattern":"\\Qorg/game/tetris/sound/gameover.wav\\E"
-    }, 
-    {
-      "pattern":"\\Qorg/game/tetris/sound/line.wav\\E"
-    }, 
-    {
-      "pattern":"\\Qorg/game/tetris/sound/rotate.wav\\E"
-    }, 
-    {
-      "pattern":"\\Qorg/game/tetris/sound/slow-hit.wav\\E"
     }, 
     {
       "pattern":"\\Qorg/jline/utils/capabilities.txt\\E"

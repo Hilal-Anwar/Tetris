@@ -68,7 +68,7 @@ public class Game {
         for (int i = HEIGHT - 2; i >= 1; i--) {
             if (i == 1) {
                 game_status = false;
-                play("sound/gameover.wav", -0.0f, false);
+                //play("sound/gameover.wav", -0.0f, false);
                 return;
             }
             var val = isFilled(i);
@@ -77,9 +77,9 @@ public class Game {
                     c++;
                 } else {
                     if (c > 0) {
-                        if (c == 1)
+                        /*if (c == 1)
                             play("sound/clear.wav", -0.0f, false);
-                        else play("sound/line.wav", -0.0f, false);
+                        else play("sound/line.wav", -0.0f, false);*/
                         clean_this_box(i + 1, i + c);
                         k = k + c;
                         c = 0;
@@ -129,11 +129,11 @@ public class Game {
         };
         if (key_pressed == Key.DOWN) {
             rotate(key_pressed);
-            play("sound/rotate.wav", -10.0f, false);
+            //play("sound/rotate.wav", -10.0f, false);
         }
         if (key_pressed == Key.UP) {
             rotate(key_pressed);
-            play("sound/rotate.wav", -10.0f, false);
+            //play("sound/rotate.wav", -10.0f, false);
         }
         if (key_pressed == Key.HOLD)
             hold_key = !hold_key;
@@ -142,7 +142,7 @@ public class Game {
         int step;
         if (key_pressed == Key.SPACE && !hold_key) {
             step = getAvailable(30);
-            play("sound/fall.wav", -10.0f, false);
+            //play("sound/fall.wav", -10.0f, false);
         } else step = getAvailable(1);
         if (step > 0 || condition) {
             for (var t : tetrominoes) {
@@ -166,8 +166,8 @@ public class Game {
             tetrominoes = tetris.getTetrominoes((int) (Math.random() * (WIDTH-5) + 1), 1, tetris_no);
             dummy_tetris_no = (int) (Math.random() * 7 + 1);
             dummy_tetris = tetris.getTetrominoes(0, 8, dummy_tetris_no);
-            if (key_pressed != Key.SPACE)
-                play("sound/slow-hit.wav", -0.0f, false);
+            /*if (key_pressed != Key.SPACE)
+                play("sound/slow-hit.wav", -0.0f, false);*/
             _tetris_timer = 0;
         } else _tetris_timer++;
         keyBoardInput.setKeyBoardKey(Key.NONE);

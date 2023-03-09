@@ -17,7 +17,7 @@ public class GameLauncher {
                 
             """;
 
-    public void launch() throws IOException, InterruptedException {
+    public void launch() throws InterruptedException {
         display = new Display();
         keyBoardInput = new KeyBoardInput(display);
         String information = """
@@ -61,7 +61,7 @@ public class GameLauncher {
                 """;
         String message = information;
         loading(new StringBuilder("=>"));
-        Game.play("sound/background_sound.wav", -25.0f, true);
+        //Game.play("sound/background_sound.wav", -25.0f, true);
         while (keyBoardInput.getKeyBoardKey() != Key.ENTER) {
             var k = keyBoardInput.getKeyBoardKey();
             System.out.println("Welcome to tetris");
