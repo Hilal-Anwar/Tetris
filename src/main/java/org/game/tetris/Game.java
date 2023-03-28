@@ -1,9 +1,8 @@
 package org.game.tetris;
 
+import javafx.scene.media.AudioClip;
 import org.jline.utils.InfoCmp;
 
-import javax.sound.sampled.*;
-import java.io.IOException;
 import java.util.Objects;
 
 
@@ -26,6 +25,13 @@ public class Game {
     private final KeyBoardInput keyBoardInput;
     private final Display display;
     private int _tetris_timer = 0;
+    private final AudioClip s_game_over = create("sound/gameover.wav", 0.5, false);
+    private final AudioClip s_clear = create("sound/clear.wav", 0.5, false);
+    private final AudioClip s_line = create("sound/line.wav", 0.5, false);
+    private final AudioClip s_rotate = create("sound/rotate.wav", 0.5, false);
+    private final AudioClip s_fall = create("sound/fall.wav", 0.5, false);
+    private final AudioClip s_slow_hit = create("sound/slow-hit.wav", 0.5, false);
+
 
     public Game(KeyBoardInput keyBoardInput, Display display) {
         this.keyBoardInput = keyBoardInput;
@@ -35,7 +41,7 @@ public class Game {
     void start() throws InterruptedException {
         initialize_tetris();
         tetris_no = 3;
-        tetrominoes = tetris.getTetrominoes((int) (Math.random() * (WIDTH-5) + 1), 1, tetris_no);
+        tetrominoes = tetris.getTetrominoes((int) (Math.random() * (WIDTH - 5) + 1), 1, tetris_no);
         dummy_tetris_no = (int) (Math.random() * 7 + 1);
         dummy_tetris = tetris.getTetrominoes(0, 8, dummy_tetris_no);
         while (true) {
@@ -68,7 +74,7 @@ public class Game {
         for (int i = HEIGHT - 2; i >= 1; i--) {
             if (i == 1) {
                 game_status = false;
-                play("sound/gameover.wav", -0.0f, false);
+                s_game_over.play();
                 return;
             }
             var val = isFilled(i);
@@ -78,8 +84,8 @@ public class Game {
                 } else {
                     if (c > 0) {
                         if (c == 1)
-                            play("sound/clear.wav", -0.0f, false);
-                        else play("sound/line.wav", -0.0f, false);
+                            s_clear.play();
+                        else s_line.play();
                         clean_this_box(i + 1, i + c);
                         k = k + c;
                         c = 0;
@@ -129,11 +135,11 @@ public class Game {
         };
         if (key_pressed == Key.DOWN) {
             rotate(key_pressed);
-            play("sound/rotate.wav", -10.0f, false);
+            s_rotate.play();
         }
         if (key_pressed == Key.UP) {
             rotate(key_pressed);
-            play("sound/rotate.wav", -10.0f, false);
+            s_rotate.play();
         }
         if (key_pressed == Key.HOLD)
             hold_key = !hold_key;
@@ -142,7 +148,7 @@ public class Game {
         int step;
         if (key_pressed == Key.SPACE && !hold_key) {
             step = getAvailable(30);
-            play("sound/fall.wav", -10.0f, false);
+            s_fall.play();
         } else step = getAvailable(1);
         if (step > 0 || condition) {
             for (var t : tetrominoes) {
@@ -163,11 +169,11 @@ public class Game {
             no_of_tetrominoes++;
             tetris_no = dummy_tetris_no;
             tetrominoes_data[tetris_no - 1] = tetrominoes_data[tetris_no - 1] + 1;
-            tetrominoes = tetris.getTetrominoes((int) (Math.random() * (WIDTH-5) + 1), 1, tetris_no);
+            tetrominoes = tetris.getTetrominoes((int) (Math.random() * (WIDTH - 5) + 1), 1, tetris_no);
             dummy_tetris_no = (int) (Math.random() * 7 + 1);
             dummy_tetris = tetris.getTetrominoes(0, 8, dummy_tetris_no);
             if (key_pressed != Key.SPACE)
-                play("sound/slow-hit.wav", -0.0f, false);
+                s_slow_hit.play();
             _tetris_timer = 0;
         } else _tetris_timer++;
         keyBoardInput.setKeyBoardKey(Key.NONE);
@@ -376,7 +382,7 @@ public class Game {
     }
 
     private String message() {
-        return "" + (" ".repeat(WIDTH*3/2 - "Tetris".length() / 2)) + "Tetris";
+        return "" + (" ".repeat(WIDTH * 3 / 2 - "Tetris".length() / 2)) + "Tetris";
     }
 
     private void draw() {
@@ -409,7 +415,7 @@ public class Game {
             }
             s.append('\n');
         }
-        System.out.println(s.toString().indent(display.getSize().getColumns()/2-(WIDTH*3+8)/2));
+        System.out.println(s.toString().indent(display.getSize().getColumns() / 2 - (WIDTH * 3 + 8) / 2));
     }
 
     private void draw_dummy_tetrominoes(StringBuilder s, int i) {
@@ -426,6 +432,7 @@ public class Game {
                 s.append("   ");
         }
     }
+
     private boolean print_tetrominoes(int i, int j) {
         for (var k : tetrominoes) {
             if (k.x == j && k.y == i) {
@@ -446,13 +453,14 @@ public class Game {
 
         }
     }
+
     private boolean isValidPoints(int... c) {
         for (int i = 0; i <= 2; i++) {
-            if (c[i] <= 0 || c[i] >= 14)
+            if (c[i] <= 0 || c[i] >= WIDTH - 1)
                 return false;
         }
         for (int i = 3; i <= 5; i++) {
-            if (c[i] <= 0 || c[i] >= 29)
+            if (c[i] <= 0 || c[i] >= HEIGHT - 1)
                 return false;
         }
         return true;
@@ -524,32 +532,25 @@ public class Game {
     private String isFilled(int i) {
         var a = box[i];
         int l = 0, m = 0;
-        for (int p = 1; p <= WIDTH-2; p++) {
+        for (int p = 1; p <= WIDTH - 2; p++) {
             if (a[p] == null)
                 l++;
             else
                 m++;
         }
-        if (l == WIDTH-2)
+        if (l == WIDTH - 2)
             return "Empty";
-        if (m == WIDTH-2)
+        if (m == WIDTH - 2)
             return "Filled";
         return "Half_Filled";
     }
 
-    static void play(String name, float volume, boolean isRepeatable) {
-        var url = GameLauncher.class.getResource(name);
-        Clip audioClip;
-        try (var audioInputStream = AudioSystem.getAudioInputStream(Objects.requireNonNull(url))) {
-            audioClip = AudioSystem.getClip();
-            audioClip.open(audioInputStream);
-            var level = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
-            level.setValue(volume);
-            if (isRepeatable)
-                audioClip.loop(Clip.LOOP_CONTINUOUSLY);
-            audioClip.start();
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            e.printStackTrace();
-        }
+    static AudioClip create(String name, double volume, boolean isRepeatable) {
+        var url = Objects.requireNonNull(GameLauncher.class.getResource(name)).toString();
+        AudioClip sound = new AudioClip(url);
+        sound.setVolume(volume);
+        if (isRepeatable)
+            sound.setCycleCount(AudioClip.INDEFINITE);
+        return sound;
     }
 }

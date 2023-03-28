@@ -3,22 +3,34 @@
   "includes":[
     {
       "pattern":"\\QMETA-INF/services/org.jline.terminal.spi.JansiSupport\\E"
-    },
+    }, 
     {
       "pattern":"\\QMETA-INF/services/org.jline.terminal.spi.JnaSupport\\E"
     }, 
     {
+      "pattern":"\\Qcom/sun/glass/utils/NativeLibLoader.class\\E"
+    }, 
+    {
       "pattern":"\\Qcom/sun/jna/win32-x86-64/jnidispatch.dll\\E"
+    }, 
+    {
+      "pattern":"\\Qfxplugins.dll\\E"
+    }, 
+    {
+      "pattern":"\\Qglib-lite.dll\\E"
+    }, 
+    {
+      "pattern":"\\Qgstreamer-lite.dll\\E"
+    }, 
+    {
+      "pattern":"\\Qjfxmedia.dll\\E"
     }, 
     {
       "pattern":"\\Qorg/fusesource/jansi/internal/native/Windows/x86_64/jansi.dll\\E"
     }, 
     {
       "pattern":"\\Qorg/fusesource/jansi/jansi.properties\\E"
-    },
-    {
-      "pattern":"\\Qorg/game/tetris/sound/sound.properties\\E"
-    },
+    }, 
     {
       "pattern":"\\Qorg/game/tetris/sound/background_sound.wav\\E"
     }, 

@@ -61,7 +61,8 @@ public class GameLauncher {
                 """;
         String message = information;
         loading(new StringBuilder("=>"));
-        Game.play("sound/background_sound.wav", -25.0f, true);
+        var background_sound=Game.create("sound/background_sound.wav", 0.2, true);
+        background_sound.play();
         while (keyBoardInput.getKeyBoardKey() != Key.ENTER) {
             var k = keyBoardInput.getKeyBoardKey();
             System.out.println("Welcome to tetris");

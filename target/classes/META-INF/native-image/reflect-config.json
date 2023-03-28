@@ -25,6 +25,10 @@
   "name":"com.sun.jna.win32.DLLCallback"
 },
 {
+  "name":"com.sun.media.jfxmediaimpl.platform.gstreamer.GSTPlatform",
+  "methods":[{"name":"getPlatformInstance","parameterTypes":[] }]
+},
+{
   "name":"java.lang.Object",
   "methods":[
     {"name":"equals","parameterTypes":["java.lang.Object"] }, 
@@ -74,10 +78,18 @@
   ]
 },
 {
+  "name":"java.net.URLConnection",
+  "methods":[{"name":"getContentLengthLong","parameterTypes":[] }]
+},
+{
   "name":"java.nio.Buffer"
 },
 {
   "name":"java.security.SecureRandomParameters"
+},
+{
+  "name":"java.util.concurrent.atomic.AtomicBoolean",
+  "fields":[{"name":"value"}]
 },
 {
   "name":"java.util.concurrent.atomic.AtomicReference",
@@ -89,6 +101,10 @@
     {"name":"base"}, 
     {"name":"cellsBusy"}
   ]
+},
+{
+  "name":"org.jline.terminal.impl.jna.win.Kernel32$CONSOLE_SCREEN_BUFFER_INFO",
+  "allDeclaredFields":true
 },
 {
   "name":"org.jline.terminal.impl.jna.win.Kernel32$COORD",
@@ -132,6 +148,12 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"org.jline.terminal.impl.jna.win.Kernel32$SMALL_RECT",
+  "allDeclaredFields":true,
+  "queryAllPublicConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"org.jline.terminal.impl.jna.win.Kernel32$UnionChar",
   "allDeclaredFields":true,
   "queryAllPublicConstructors":true,
@@ -146,6 +168,10 @@
 {
   "name":"sun.security.provider.DRBG",
   "methods":[{"name":"<init>","parameterTypes":["java.security.SecureRandomParameters"] }]
+},
+{
+  "name":"sun.security.provider.MD5",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"sun.security.provider.SHA",
