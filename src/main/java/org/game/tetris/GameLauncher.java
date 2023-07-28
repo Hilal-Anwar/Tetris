@@ -1,8 +1,10 @@
 package org.game.tetris;
 
+import org.game.tetris.core.Game;
+import org.game.tetris.util.Display;
+import org.game.tetris.util.Key;
+import org.game.tetris.util.KeyBoardInput;
 import org.jline.utils.InfoCmp;
-
-import java.io.IOException;
 
 public class GameLauncher {
     KeyBoardInput keyBoardInput;
@@ -17,7 +19,7 @@ public class GameLauncher {
                 
             """;
 
-    public void launch() throws IOException, InterruptedException {
+    public void launch() throws InterruptedException {
         display = new Display();
         keyBoardInput = new KeyBoardInput(display);
         String information = """
@@ -61,7 +63,7 @@ public class GameLauncher {
                 """;
         String message = information;
         loading(new StringBuilder("=>"));
-        var background_sound=Game.create("sound/background_sound.wav", 0.2, true);
+        var background_sound= Game.create("sound/background_sound.wav", 0.2, true);
         background_sound.play();
         while (keyBoardInput.getKeyBoardKey() != Key.ENTER) {
             var k = keyBoardInput.getKeyBoardKey();
